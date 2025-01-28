@@ -1,15 +1,24 @@
 
 import { FaRegTrashAlt } from "react-icons/fa";
+import { useEffect } from "react";
+import api from "../../services/api";
 
 function App() {
 
 
-  const users = [
-    { id:1 ,nome: "John Doe", idade: 30, email: "john@example.com" },
-    { id:2 ,nome: "Jane Doe", idade: 25, email: "jane@example.com" },
-    { id:3 ,nome: "Alice Smith", idade: 28, email: "alice@example.com" },
-    { id:4 ,nome: "Bob Johnson", idade: 35, email: "bob@example.com" }
-  ]
+  let users = []
+
+  async function getUsers() {
+
+    const usersFromApi = await api.get("/users")
+
+    users = usersFromApi.data
+
+  }
+
+  useEffect(() => {
+    getUsers()
+  }, [])
 
   return (
 
@@ -26,15 +35,16 @@ function App() {
       </div>
 
       {users.map(( user ) => (
-        <div key={user.id}>
+        <div key={user.id} className="flex justify-between bg-[#2e2d4e] m-[10px] p-3 pl-4 rounded-xl w-[400px]">
           <div >  
-            <p>Nome: {user.name} </p>
-            <p>Idade: {user.idade}</p>
-            <p>Email: {user.email} </p>
-            <button>
-              <FaRegTrashAlt className="text-red-600"/>
-            </button>
+            <p className="font-bold text-white">Nome:  <span className="font-normal">{user.name}</span> </p>
+            <p className="font-bold text-white">Idade: <span className="font-normal">{user.age}</span></p>
+            <p className="font-bold text-white">Email: <span className="font-normal">{user.email}</span> </p>
+           
           </div>
+          <button className="cursor-pointer m-3 hover:opacity-70" >
+              <FaRegTrashAlt className="text-red-600"/>
+          </button>
         </div>
       ))}
     </div>
